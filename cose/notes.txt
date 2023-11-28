@@ -1,0 +1,94 @@
+ogni tabella può avere 1 vincolo, 2 vincoli o 0 vincoli;
+
+2 vincoli:
+dims = somma tra profondità di un albero e larghezza dell'altro;
+numero di entries = largehzza secondo albero
+numero dati per entry = larghezza primo albero
+
+1 vincolo:
+larghezza = larghezza dell'albero
+
+0 vincoli:
+larghezza = entry più grande
+
+------------------------------------------------------------------
+
+(
+    "A"(
+        "B"(
+            "C",
+            "D"
+        ), 
+        "E"(
+            "F",
+            "G"
+        )
+    ), 
+    "H"(
+        "I"[2]
+    )
+    "J"
+);
+
+(
+    "A"(
+        "B"[2](
+            [bc1, bd1, bf1, bg1, bh1, bi1], 
+            [bc2, bd2, bf2, bg2, bh2, bi2]
+        ),
+        "C"([cc, cd, cf, cg, ch, ci])
+    ),
+    "D"([dc, dd, df, dg, dh, di]);
+);
+
+primi tr sono quelli che corrispondono alla
+profondita del primo albero
+
+dentro il primo di questo tr c'è un td che fa da pivot
+il pivot c'è solo se si hanno due alberi
+il pivot ha come clspn la profondità del secondo albero
+il pivot ha come rwspn la profondità del primo albero
+
+dopo il pivot ci sono tanti td quanti sono i nodi
+dell'albero a quell'altezza
+
+ogni td ha come clpsn il valore del sotto albero
+il valore del sotto albero è la somma dei valori delle foglie
+ogni nodo foglia vale 1, a meno che non sia specificato un altro numero
+ogni td ha come rwspn ha la profondità dell'albero - la profondità di quel td
+
+poi ci sono altri tr, il cui numero corrisponde alla somma dei
+valori delle foglie del secondo albero
+
+in ogni tr ci sono (numero nodi a quell'altezza + numero di valori per entry)
+il numero di valori per entry è il valore delle foglie del primo albero a partire dalla radice
+
+i primi td hanno rwspn = valore delle foglie del sottoalbero
+se una foglia ha valore maggiore di 1 ad esempio B il prossimo
+tr non ha td con nome, questo tante volte quanto il valore del nodo
+i primi td hanno clspn = altezza albero - altezza nodo
+
+-------------------------------------------------------
+
+costruzione albero
+
+inizio con root
+
+se trovo ( vuol dire che ha figli e che dunque devo aspettarmi
+dei figli, concettualmente inizializzo l'array dei figli
+
+il prossimo valore è il nome del figlio, che verrà aggiunto all'array
+è possibile che ci sia una [, allora guardo dentro il valore e lo inserisco
+
+se incontro un'altra ( continuo il processo entrando nell'ambito 
+dell'ultimo figlio inserito, altrimenti se incontro
+una , significa che segue un altro figlio.
+
+quando trovo ) vuol dire che ho finito con i figli di quel nodo e salgo
+di un livello, successivamente posso trovare o , che mi indica un fratello
+oppure ) che mi dice di andare su di nuovo
+il processo finisce se ritorno a root
+
+per il secondo albero quando vado a controllare i figli di quel nodo
+che sono delle n tuple di tanti elementi quanta la profondità del primo
+albero e n è il valore di quel nodo del secondo albero

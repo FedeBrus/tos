@@ -1,0 +1,30 @@
+body {
+    background-color: black;
+    color: white;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+div {
+    width: 1000px;
+    margin: 100px auto;
+}
+
+pre {
+    font-size: 125%;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+td {
+    padding: 10px;
+    border: 1px solid white;
+}
+
+.header {
+    font-weight: bold;
+    border: 2px solid white;
+    font-size: 125%;
+}

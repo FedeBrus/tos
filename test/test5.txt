@@ -1,0 +1,24 @@
+A(
+    B(
+        C,
+        D
+    ),
+    E(
+        F,
+        G
+    )
+), 
+H(
+    I[2]
+),
+J;
+
+
+A(
+    B[2](
+        {bc1, bd1, bf1, bg1, bh1, bi1, bj1},
+        {bc2, bd2, bf2, bg2, bh2, bi2, bj2}
+    ),
+    C({cc, cd, cf, cg, ch, ci, cj})
+),
+D({dc, dd, df, dg, dh, di, dj});

@@ -1,4 +1,5 @@
 import re
+import sys
 from htmlw import Htmlw
 from node import Node
 
@@ -58,13 +59,13 @@ def create_trees(tokens):
     i += 1
 
     while(i < len(tokens) and tokens[i] != ';'):
-        
+
         if(tokens[i] == '('):
             current2 = current2.children[-1]
-        
+
         elif(tokens[i] == ')'):
             current2 = current2.parent
-        
+
         elif(tokens[i] == ','):
             pass
 
@@ -82,7 +83,7 @@ def create_trees(tokens):
                         entry.append(tokens[i])
                     i += 1
                 current2.content.append(entry)
-        
+
         elif(tokens[i].isalnum()):
             if(len(current2.content) > 0):
                 return None, None
@@ -96,8 +97,11 @@ def create_trees(tokens):
 
     return current1, current2
 
-filepath = './test/test.txt'
-htmlpath = './result/index.html'
+if(len(sys.argv) != 3):
+    sys.exit()
+
+filepath = sys.argv[1]
+htmlpath = sys.argv[2]
 
 with open(filepath) as f:
     content = f.read()
@@ -135,7 +139,7 @@ while(len(queue) > 0):
         current_depth = current[1]
         if(current_depth > 1):
             h.close_tags('tr')
-        
+
         if(current_depth < depth1):
             h.open_tags('tr')
 
@@ -144,11 +148,10 @@ while(len(queue) > 0):
         first = False
         h.write(f'<td class="header" colspan="{depth2 - 1}" rowspan="{depth1 - 1}"></td>')
 
-
-    h.write(f'<td class="header" colspan="{a1.node_subtree_value(current[0].name)}"')     
+    h.write(f'<td class="header" colspan="{a1.node_subtree_value(current[0].name)}"')
     # I <td> foglia che non si trovano in fondo devono avere un rowspan
     if(len(current[0].children) == 0 and current[1] != depth1 - 1):
-        h.write(f' rowspan="{depth1 - current[1]}"')     
+        h.write(f' rowspan="{depth1 - current[1]}"')
     h.write(f'>{current[0].name}</td>')
 
 h.close_tags('tr')
@@ -163,7 +166,7 @@ else:
         for entry in row:
             h.tag_content('td', entry)
         h.close_tags('tr')
-    
+
 current_depth = 0
 h.open_tags('tr')
 while(len(stack) > 0):
@@ -176,10 +179,10 @@ while(len(stack) > 0):
     if(current[1] <= current_depth):
         h.close_tags('tr')
         h.open_tags('tr')
-    
+
     current_depth = current[1]
 
-    h.write(f'<td class="header" rowspan="{a2.node_subtree_value(current[0].name)}"')     
+    h.write(f'<td class="header" rowspan="{a2.node_subtree_value(current[0].name)}"')
     # I <td> foglia che si trovano in fondo devono avere un rowspan
     if(len(current[0].children) == 0 and current[1] != depth2 - 1):
         h.write(f' colspan="{depth2 - current[1]}"')
@@ -189,7 +192,7 @@ while(len(stack) > 0):
         if(len(current[0].content) >= 1):
             for entry in current[0].content[0]:
                 h.tag_content('td', entry)
-            
+
     # Quando il valore del nodo è diverso da 1 devo aprire un nuovo <tr>
     if(current[0].value > 1):
         for i in range(0, current[0].value - 1):
